@@ -22,6 +22,12 @@
 
 **CRITICAL**: Epic 19 privacy/compliance tasks should NOT be actively worked on. Focus on authentication and file browser priorities.
 
+**IMPORTANT EPIC 1 UPDATE (2025-08-02)**: Epic 1 tasks are now tracked in `src/data/epic1-state.json` instead of the old database system. When working on Epic 1:
+- Check `src/data/epic1-state.json` for task status and assignment
+- Update task status directly in this file when completing work
+- The old database `state.db` is deprecated for Epic 1 tasks
+- Use standard git workflow for tracking changes to epic1-state.json
+
 Developers can now self-assign and manage tasks directly without waiting for ASSIGN/BUILD phases:
 
 1. **Check business priorities and available tasks:**
@@ -141,6 +147,10 @@ Developers can now self-assign and manage tasks directly without waiting for ASS
 - Use `--priority-only` flag to avoid Epic 19 privacy tasks
 - Focus on authentication (Story 20.1) and file browser (Story 20.2) work
 - Call `finish-task.js` IMMEDIATELY when implementation complete
+- **EPIC 1 AGENTS**: Check `src/data/epic1-state.json` for task status, not the database
+  - Update task status in epic1-state.json when completing Epic 1 work
+  - Current Epic 1 progress: Story 1.4 (Execution & Preview) is 50% complete
+  - Next available tasks: Task 20 (preview caching) and Task 21 (WebWorker)
 
 **For QA Agents:**
 
@@ -219,3 +229,37 @@ Hi team! Brief summary of what was accomplished.
 ---
 
 **🎯 Remember: Focus on user-facing features (authentication, file browser) that deliver business value, not internal compliance work.**
+
+---
+
+## MULTI-AGENT COMMUNICATION HISTORY
+
+**[JAMES-DEV] NOTE (2025-08-02 - Epic 1 Task 19):**
+Hi team! Just completed Task 19 from Epic 1 Story 1.4.
+
+### Work Completed:
+- **DiffEngine**: LCS-based diff algorithm for tracking preview changes
+- **UI Components**: DiffViewer, DiffIndicator, ChangeHighlight with animations
+- **Integration**: Fully integrated into PreviewPanel with automatic change detection
+- **Status**: ✅ COMPLETE
+
+### Git-Style Comments:
+```
+feat(epic1): add diff algorithm for change highlighting (Task 19)
+
+- Create DiffEngine with LCS-based word-level diff algorithm
+- Build DiffViewer components for inline visualization  
+- Add change indicators and highlight animations
+- Integrate diff tracking into PreviewPanel
+- Track previous results and show changes on updates
+- Add comprehensive test suite for diff functionality
+- Story 1.4 now 50% complete
+```
+
+### Next Steps:
+- Epic 1 Story 1.4 is now 50% complete (Tasks 18 & 19 done)
+- Next available tasks in Story 1.4:
+  - Task 20: Create preview caching system
+  - Task 21: Implement WebWorker for non-blocking execution
+- **IMPORTANT**: Epic 1 tasks are tracked in `src/data/epic1-state.json`, not the old database
+- The finish-task.js script doesn't recognize Epic 1 task IDs properly

@@ -1,0 +1,104 @@
+/**
+ * CacheIndicator styles
+ */
+
+.cache-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.cache-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cache-badge.cached {
+  background: #10b981;
+  color: white;
+  animation: cache-hit 0.3s ease-out;
+}
+
+@keyframes cache-hit {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.cache-stats {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.cache-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cache-stat-label {
+  color: #666;
+  font-size: 11px;
+}
+
+.cache-stat-value {
+  font-weight: 500;
+  color: #333;
+}
+
+.cache-size-bar {
+  position: relative;
+  width: 60px;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-left: 4px;
+}
+
+.cache-size-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #6366f1;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .cache-indicator {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .cache-stat-label {
+    color: #999;
+  }
+
+  .cache-stat-value {
+    color: #fff;
+  }
+
+  .cache-size-bar {
+    background: #374151;
+  }
+}

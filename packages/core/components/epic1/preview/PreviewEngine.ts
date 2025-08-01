@@ -7,18 +7,24 @@
 
 import { Epic1ExecutionEngine, Epic1Graph, ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
+import { PreviewCache } from './PreviewCache';
+import { ReactFlowNode, ReactFlowEdge } from '../types';
 
 export enum PreviewState {
   IDLE = 'idle',
   PENDING = 'pending',
   EXECUTING = 'executing',
-  ERROR = 'error'
+  ERROR = 'error',
+  CACHED = 'cached'
 }
 
 export interface PreviewOptions {
   debounceDelay?: number;
   maxExecutionTime?: number;
   seeds?: (string | number)[];
+  enableCache?: boolean;
+  cacheMaxSize?: number;
+  cacheMaxAgeMinutes?: number;
 }
 
 export interface PreviewUpdate {
@@ -26,17 +32,23 @@ export interface PreviewUpdate {
   results?: ExecutionResult[];
   error?: Error;
   timestamp: number;
+  cached?: boolean;
+  cacheStats?: {
+    hitRate: number;
+    size: number;
+  };
 }
 
 export type PreviewUpdateCallback = (update: PreviewUpdate) => void;
 
 /**
- * PreviewEngine - Intelligent debounced graph execution
+ * PreviewEngine - Intelligent debounced graph execution with caching
  */
 export class PreviewEngine {
   private debounceDelay: number;
   private maxExecutionTime: number;
   private seeds: (string | number)[];
+  private cache: PreviewCache | null = null;
   
   private debounceTimer: NodeJS.Timeout | null = null;
   private currentExecution: Promise<ExecutionResult[]> | null = null;
@@ -46,10 +58,22 @@ export class PreviewEngine {
   private lastUpdate: PreviewUpdate | null = null;
   private updateCallbacks: Set<PreviewUpdateCallback> = new Set();
 
+  // Track current graph for caching
+  private currentNodes: ReactFlowNode[] = [];
+  private currentEdges: ReactFlowEdge[] = [];
+
   constructor(options: PreviewOptions = {}) {
     this.debounceDelay = options.debounceDelay ?? 300;
     this.maxExecutionTime = options.maxExecutionTime ?? 5000;
     this.seeds = options.seeds ?? [1234, 5678, 9012];
+    
+    // Initialize cache if enabled
+    if (options.enableCache !== false) {
+      this.cache = new PreviewCache(
+        options.cacheMaxSize ?? 100,
+        options.cacheMaxAgeMinutes ?? 30
+      );
+    }
   }
 
   /**
@@ -72,8 +96,26 @@ export class PreviewEngine {
   /**
    * Update preview with debouncing
    */
-  updatePreview(graph: Epic1Graph): void {
-    // Cancel any pending debounce
+  updatePreview(graph: Epic1Graph, nodes: ReactFlowNode[], edges: ReactFlowEdge[]): void {
+    // Store current graph structure for caching
+    this.currentNodes = nodes;
+    this.currentEdges = edges;
+
+    // Check cache first
+    if (this.cache) {
+      const cachedResults = this.cache.get(nodes, edges, this.seeds as number[]);
+      if (cachedResults) {
+        // Found in cache - return immediately
+        const stats = this.cache.getStats();
+        this.setState(PreviewState.CACHED, cachedResults, undefined, true, {
+          hitRate: stats.hitRate,
+          size: stats.size
+        });
+        return;
+      }
+    }
+
+    // Not in cache - proceed with debouncing
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
       this.debounceTimer = null;
@@ -94,7 +136,25 @@ export class PreviewEngine {
   /**
    * Force immediate preview update (bypasses debouncing)
    */
-  async updatePreviewImmediate(graph: Epic1Graph): Promise<void> {
+  async updatePreviewImmediate(graph: Epic1Graph, nodes: ReactFlowNode[], edges: ReactFlowEdge[]): Promise<void> {
+    // Store current graph structure for caching
+    this.currentNodes = nodes;
+    this.currentEdges = edges;
+
+    // Check cache first
+    if (this.cache) {
+      const cachedResults = this.cache.get(nodes, edges, this.seeds as number[]);
+      if (cachedResults) {
+        // Found in cache - return immediately
+        const stats = this.cache.getStats();
+        this.setState(PreviewState.CACHED, cachedResults, undefined, true, {
+          hitRate: stats.hitRate,
+          size: stats.size
+        });
+        return;
+      }
+    }
+
     // Cancel any pending debounce
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
@@ -153,7 +213,18 @@ export class PreviewEngine {
 
       // Check if still not aborted
       if (!signal.aborted) {
-        this.setState(PreviewState.IDLE, results);
+        // Store in cache
+        if (this.cache) {
+          this.cache.set(this.currentNodes, this.currentEdges, this.seeds as number[], results);
+        }
+
+        // Update state with cache stats
+        const cacheStats = this.cache ? {
+          hitRate: this.cache.getStats().hitRate,
+          size: this.cache.getStats().size
+        } : undefined;
+
+        this.setState(PreviewState.IDLE, results, undefined, false, cacheStats);
       }
 
     } catch (error) {
@@ -182,14 +253,22 @@ export class PreviewEngine {
   /**
    * Update state and notify subscribers
    */
-  private setState(state: PreviewState, results?: ExecutionResult[], error?: Error): void {
+  private setState(
+    state: PreviewState, 
+    results?: ExecutionResult[], 
+    error?: Error,
+    cached?: boolean,
+    cacheStats?: { hitRate: number; size: number }
+  ): void {
     this.state = state;
     
     const update: PreviewUpdate = {
       state,
       results,
       error,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      cached,
+      cacheStats
     };
 
     this.lastUpdate = update;
@@ -240,6 +319,56 @@ export class PreviewEngine {
   }
 
   /**
+   * Get cache statistics
+   */
+  getCacheStats(): { enabled: boolean; stats?: ReturnType<PreviewCache['getStats']> } {
+    if (!this.cache) {
+      return { enabled: false };
+    }
+    
+    return {
+      enabled: true,
+      stats: this.cache.getStats()
+    };
+  }
+
+  /**
+   * Clear the cache
+   */
+  clearCache(): void {
+    if (this.cache) {
+      this.cache.clear();
+    }
+  }
+
+  /**
+   * Clear expired cache entries
+   */
+  clearExpiredCache(): void {
+    if (this.cache) {
+      this.cache.clearExpired();
+    }
+  }
+
+  /**
+   * Get cache size information
+   */
+  getCacheSizeInfo(): ReturnType<PreviewCache['getSizeInfo']> | null {
+    return this.cache ? this.cache.getSizeInfo() : null;
+  }
+
+  /**
+   * Enable or disable caching
+   */
+  setCacheEnabled(enabled: boolean): void {
+    if (enabled && !this.cache) {
+      this.cache = new PreviewCache();
+    } else if (!enabled && this.cache) {
+      this.cache = null;
+    }
+  }
+
+  /**
    * Clean up resources
    */
   dispose(): void {
@@ -253,5 +382,10 @@ export class PreviewEngine {
     
     // Clear callbacks
     this.updateCallbacks.clear();
+    
+    // Clear cache
+    if (this.cache) {
+      this.cache.clear();
+    }
   }
 }

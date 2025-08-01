@@ -69,7 +69,10 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   if (!previewEngineRef.current) {
     previewEngineRef.current = new PreviewEngine({
       debounceDelay: previewDebounceDelay,
-      seeds: previewSeeds
+      seeds: previewSeeds,
+      enableCache: true,
+      cacheMaxSize: 100,
+      cacheMaxAgeMinutes: 30
     });
   }
 
@@ -163,7 +166,7 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
 
     const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
     if (runtimeGraph) {
-      previewEngineRef.current.updatePreview(runtimeGraph);
+      previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
     }
   }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph]);
 
@@ -253,7 +256,7 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
       // Just trigger a new execution with the updated seeds
       const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
       if (runtimeGraph) {
-        previewEngineRef.current.updatePreview(runtimeGraph);
+        previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
       }
     }
   }, [enhancedNodes, edges, convertToRuntimeGraph]);

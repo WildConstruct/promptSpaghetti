@@ -10,6 +10,7 @@ import { PreviewEngine, PreviewState, PreviewUpdate } from './PreviewEngine';
 import { ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { DiffEngine, ChangeSet } from './DiffEngine';
 import { DiffViewer, DiffIndicator, ChangeHighlight } from './DiffViewer';
+import { CacheIndicator } from './CacheIndicator';
 import './PreviewPanel.css';
 
 export interface PreviewPanelProps {
@@ -285,6 +286,17 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           )}
         </div>
       </div>
+
+      {/* Cache indicator */}
+      {previewUpdate?.cacheStats && (
+        <CacheIndicator
+          cached={previewUpdate.cached || false}
+          hitRate={previewUpdate.cacheStats.hitRate}
+          size={previewUpdate.cacheStats.size}
+          maxSize={100}
+          className="preview-cache-indicator"
+        />
+      )}
 
       {showSeedControls && renderSeedControls()}
 
