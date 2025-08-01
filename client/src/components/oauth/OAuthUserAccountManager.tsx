@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * OAuth User Account Manager - Epic 19.5
  * 
  * User-facing OAuth account management interface for linking/unlinking

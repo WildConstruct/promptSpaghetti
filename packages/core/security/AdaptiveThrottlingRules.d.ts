@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Adaptive Throttling Rules System
  * Task: E17-1753114397229-D69134 - Implement throttling rules
  * Task: E31-1753313263542-01C17D - Enhance Epic 17 AdaptiveThrottlingRules with analytics insights

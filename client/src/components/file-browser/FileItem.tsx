@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * FileItem - Individual file/folder item component with interaction support
  * 
  * Renders individual tree items with:

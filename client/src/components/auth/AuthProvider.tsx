@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * AuthProvider - Comprehensive authentication context and provider
  * 
  * Provides unified authentication context with enhanced security features,

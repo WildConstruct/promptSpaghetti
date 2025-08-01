@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Unified Security Integration Example
  * Task: E31-1753313263540-48653C - Integrate rate limiting with Epic 17 adaptive throttling
  *

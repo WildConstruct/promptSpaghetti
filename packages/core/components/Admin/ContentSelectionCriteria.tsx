@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Content Selection Criteria - E17-1753114397323-A4BE50
  * 
  * Administrative interface for creating and managing content selection criteria

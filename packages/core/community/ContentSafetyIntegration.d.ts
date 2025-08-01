@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Epic 16 - Content Safety Integration
  * Tasks: E16-1753114247062-9DDA29 & E16-1753114247061-797978
  *

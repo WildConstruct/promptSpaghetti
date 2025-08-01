@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Conversion Tracking System - E17-1753114397422-300202
  *
  * Comprehensive conversion tracking for Wild Construct platform

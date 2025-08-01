@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * MFA Status Indicators - Epic 19 Implementation
  * Real-time security status indicators for displaying MFA protection level across the application
  */

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Password Management Dashboard
  * Epic 17.3.1 - User Management Dashboard
  * Task: E17-1753114397015-CD835D

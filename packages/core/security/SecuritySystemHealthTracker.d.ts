@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Security System Health and Availability Tracking System
  * Epic 31 - Security Integration Framework
  * Task: E31-1753313263626-82FC78

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Epic 16 - Skill Level Tagging Service
  * Task: E16-1753114247112-47B1EB - Implement skill level tagging
  * 

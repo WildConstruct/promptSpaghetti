@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Policy Management Dashboard - Epic 17.5.4
  * 
  * Main admin dashboard for marketplace policy management and enforcement.

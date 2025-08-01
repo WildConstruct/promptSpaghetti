@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { TimeRange, CreatorDashboard, AnalyticsInsight } from '../../../types/analytics';
 import { DashboardOverview } from './DashboardOverview';

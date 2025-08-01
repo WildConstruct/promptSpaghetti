@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Configurable Password Complexity Rules System
  * Task: T-1752989143997-524 - Implement configurable password complexity rules
  * Epic 19: Authentication Enhancement & Security Hardening

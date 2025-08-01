@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Marketplace Dashboard - E17-1753114397415-AFF06F
  *
  * Comprehensive marketplace analytics dashboard for business intelligence

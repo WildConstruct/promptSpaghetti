@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Enhanced Toggle Dashboard Integration (Epic 17 UI Integration)
  * 
  * Provides React hooks and components that integrate the Enhanced Toggle Evaluation System

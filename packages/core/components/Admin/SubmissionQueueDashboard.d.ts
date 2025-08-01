@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Submission Queue Dashboard - E17-1753114397296-8AA0B5
  *
  * Administrative interface for managing the marketplace submission review queue

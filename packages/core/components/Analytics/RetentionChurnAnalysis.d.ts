@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * User Retention Analysis and Churn Prediction - Story 30.2 Task 10
  *
  * Advanced analytics system for tracking user retention patterns, predicting churn risk,

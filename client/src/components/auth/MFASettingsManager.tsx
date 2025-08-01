@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * MFA Settings Management Interface - Epic 19 Implementation
  * Comprehensive interface for managing existing MFA methods, viewing security status, and modifying settings
  */

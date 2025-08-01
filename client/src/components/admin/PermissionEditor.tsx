@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * PermissionEditor - Admin interface for managing user permissions and roles
  * 
  * Provides comprehensive RBAC management with:

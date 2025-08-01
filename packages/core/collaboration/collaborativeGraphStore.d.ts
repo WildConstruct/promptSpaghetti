@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Collaborative Graph Store - Epic 9.1.2
  * Extends existing graph store with collaborative editing capabilities
  */

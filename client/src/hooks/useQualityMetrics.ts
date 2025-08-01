@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Quality Metrics Hook - Epic 18
  * 
  * Custom React hook for managing quality metrics data, real-time updates,

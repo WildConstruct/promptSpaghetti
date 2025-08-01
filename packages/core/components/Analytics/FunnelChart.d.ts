@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Core Funnel Chart Visualization - Story 30.2 Task 6
  *
  * Step-by-step conversion rate visualization with interactive funnel charts,

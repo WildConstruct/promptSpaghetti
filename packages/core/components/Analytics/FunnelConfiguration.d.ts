@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Funnel Configuration System - Story 30.2 Task 5
  *
  * Advanced funnel configuration interface with drag-and-drop step management,

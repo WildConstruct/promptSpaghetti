@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 11.2 Account Linking Component
 // Interface for linking and unlinking OAuth provider accounts
 import React, { useState, useEffect } from 'react';

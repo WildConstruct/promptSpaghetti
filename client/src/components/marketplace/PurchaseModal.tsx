@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 16 Marketplace - Purchase Modal Component
 import React, { useState, useEffect } from 'react';
 import { PriceDisplay } from './PriceDisplay';

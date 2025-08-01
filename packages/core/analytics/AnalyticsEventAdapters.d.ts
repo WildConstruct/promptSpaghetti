@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Analytics Event Adapters - Story 1.5 Task 2
  *
  * Adapters to integrate existing 12+ analytics systems with the unified event bus

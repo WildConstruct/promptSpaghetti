@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Security Alerting Configuration Service
  * Task T-1752989143998-161: Build security alerting configuration UI
  *

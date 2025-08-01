@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Trust Score Manager - E17-1753114397393-BA8A32
  *
  * Administrative interface for managing and adjusting user trust scores

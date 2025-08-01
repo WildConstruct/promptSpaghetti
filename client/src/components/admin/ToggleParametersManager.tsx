@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Toggle Parameters Manager - Epic 17
  * Task: E17-1753114396772-E6C1FD - Create toggle parameters
  * 

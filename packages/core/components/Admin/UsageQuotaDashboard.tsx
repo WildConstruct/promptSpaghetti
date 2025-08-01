@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Usage Quota Management Dashboard - Epic 17
  * 
  * Comprehensive admin interface for managing usage quotas, tracking violations,

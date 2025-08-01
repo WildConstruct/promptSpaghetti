@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Time-based Funnel Performance Tracking - Story 30.2 Task 6
  * 
  * Advanced time-based analysis of funnel performance with trend detection,

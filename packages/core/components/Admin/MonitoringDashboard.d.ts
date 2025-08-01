@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Monitoring Dashboard
  * Epic 17.4.2 - Monitoring Dashboard
  * Task: E17-1753114397070-5493E0

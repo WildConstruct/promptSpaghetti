@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Revision Request Form - E17-1753114397311-674990
  * 
  * Comprehensive revision request form component for Epic 17 - Backstage Admin Controls.

@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 17.1.2 - Admin Layout Component
 // AUTH-985114-AF38: Updated for authentication integration
 // Task: E17-1753114396757-764E97 - Implement alert indicators

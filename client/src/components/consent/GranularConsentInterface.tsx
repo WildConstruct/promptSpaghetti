@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Granular Consent Options Interface
  * 
  * Provides comprehensive UI for users to manage detailed consent preferences

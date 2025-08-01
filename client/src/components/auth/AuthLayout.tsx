@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * AuthLayout - Consistent layout wrapper for authentication pages
  * 
  * Provides unified styling, navigation, and branding for all auth pages

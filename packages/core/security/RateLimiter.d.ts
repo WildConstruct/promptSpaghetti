@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Rate Limiter Implementation
  * Task: T-1752989143997-184 - Create rate limiter implementation
  * Epic 19: Authentication Enhancement & Security Hardening

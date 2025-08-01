@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Security Analytics Cost Optimization and Monitoring System
  * Epic 31 - Security Integration Framework
  * Task: E31-1753313263633-8EC097

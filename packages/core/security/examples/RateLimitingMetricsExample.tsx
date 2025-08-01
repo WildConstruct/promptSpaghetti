@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Rate Limiting Performance Metrics Example
  * Task: E31-1753313263525-EEFACB - Build API rate limiting performance metrics visualization
  * Epic 31: Security Intelligence Platform

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Bulk Property Update Dashboard - Epic 17
  *
  * Comprehensive bulk operations interface for updating properties across multiple

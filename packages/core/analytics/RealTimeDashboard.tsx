@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Real-time Analytics Dashboard - Story 1.5 Task 4
  * 
  * Consolidated real-time dashboard integrating all 12+ analytics systems

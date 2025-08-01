@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * User Lifecycle Stage Tracking and Progression Analysis - Story 30.2 Task 9
  *
  * Comprehensive system for tracking user lifecycle stages and analyzing progression

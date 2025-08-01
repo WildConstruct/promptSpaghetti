@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Recurring Schedule Manager - Epic 17
  *
  * Advanced recurring schedule management with pattern builder, conflict detection,

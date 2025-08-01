@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Automated Funnel Optimization Suggestions - Story 30.2 Task 8
  *
  * Intelligent automation system that continuously monitors funnel performance

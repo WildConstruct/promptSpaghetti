@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 16 Marketplace - Custom React Hook
 import { useState, useCallback, useRef } from 'react';
 import { API_URL } from '../config/environment';

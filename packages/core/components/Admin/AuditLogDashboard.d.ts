@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Audit Log Dashboard - Epic 17.1.6
  *
  * Advanced audit log viewing interface with comprehensive filtering,

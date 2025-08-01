@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * PrivateRoute - Component for protecting authenticated routes
  * 
  * AUTH-985114-AF38: Enhanced with role-based access control

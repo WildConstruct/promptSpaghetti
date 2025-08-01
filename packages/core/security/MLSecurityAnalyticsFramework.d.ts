@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Epic 31.4.2 - ML Security Analytics Framework
  *
  * Unified framework that orchestrates predictive security analytics

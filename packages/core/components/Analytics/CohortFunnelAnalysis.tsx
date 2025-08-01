@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Cohort-based Funnel Analysis - Story 30.2 Task 6
  * 
  * Advanced cohort analysis for funnel performance with comparative analysis,

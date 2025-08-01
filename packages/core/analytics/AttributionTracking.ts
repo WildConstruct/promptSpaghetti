@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Attribution Tracking System (Epic 16)
  * 
  * DEPLOYMENT BLOCKER FIX: Comprehensive attribution tracking system for

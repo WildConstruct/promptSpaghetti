@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * QR Code Generator - Epic 19 Implementation
  * Secure QR code generation for TOTP authenticator app enrollment with customization options
  */

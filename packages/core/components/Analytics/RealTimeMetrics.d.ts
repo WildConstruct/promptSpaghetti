@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Real-Time Metrics Component - E17-1753114397418-21317A
  *
  * Live dashboard for conversion and performance metrics

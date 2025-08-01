@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Epic 23: Graph Mutations - Core Types and Interfaces
  *
  * Defines the operational model for real-time collaborative graph editing

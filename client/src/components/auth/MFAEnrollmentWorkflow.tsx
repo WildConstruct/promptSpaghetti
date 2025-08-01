@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * MFA Enrollment Workflow - Epic 19 Implementation
  * Secure, user-friendly multi-step enrollment process for all MFA methods
  */

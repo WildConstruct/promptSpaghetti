@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * File Browser Types - TypeScript definitions for file browser components
  * 
  * Defines all interfaces and types used across the file browser system

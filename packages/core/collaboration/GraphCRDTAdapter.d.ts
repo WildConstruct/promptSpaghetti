@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Graph CRDT Adapter - Epic 9.1.2
  * Bridges existing graph schema with CRDT collaborative editing
  */

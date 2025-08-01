@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Data Access Dashboard - Epic 19.4
 // User interface for managing data access permissions and requests
 import React, { useState, useEffect, useCallback } from 'react';

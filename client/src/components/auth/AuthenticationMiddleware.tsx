@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Authentication Middleware - Global authentication state management and protection
  * 
  * Handles app-wide authentication concerns including token refresh, session monitoring,

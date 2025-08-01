@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Comprehensive Security Event Logging Policies for PromptScape
  * 
  * This module defines comprehensive security event logging policies that extend

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Secure Code Generation and Validation System
  * Task: T-1752989143997-705 - Create code generation and validation system
  * Epic 19: Authentication Enhancement & Security Hardening

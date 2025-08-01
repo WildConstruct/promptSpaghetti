@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 export interface WorkspaceId extends String { readonly __brand: 'WorkspaceId' }
 }
 export interface ProjectId extends String { readonly __brand: 'ProjectId' }

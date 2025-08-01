@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Funnel Attribution Analysis for Marketing Channels - Story 30.2 Task 7
  * 
  * Advanced attribution analysis system that tracks and analyzes the contribution

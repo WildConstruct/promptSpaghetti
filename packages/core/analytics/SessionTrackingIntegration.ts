@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Session Tracking Integration - Story 30.2 Task 1
  * 
  * Integrates with Epic 1 analytics infrastructure to provide comprehensive

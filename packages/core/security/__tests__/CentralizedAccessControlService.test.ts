@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Test Suite for Centralized Access Control Service
  * 
  * Tests comprehensive access control functionality including RBAC, ABAC,

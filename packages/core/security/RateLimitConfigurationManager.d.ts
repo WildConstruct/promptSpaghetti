@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Rate Limit Configuration Manager
  * Task: T-1752989143997-874 - Implement configurable thresholds and windows
  * Epic 19: Authentication Enhancement & Security Hardening

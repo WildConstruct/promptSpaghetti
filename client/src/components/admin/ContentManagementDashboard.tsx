@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Content Management Dashboard
  * Epic 17.2 - Content Management System  
  * Task: E17-1753114397045-B8F2A1

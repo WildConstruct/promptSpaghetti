@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Deletion Workflow Manager Component (Epic 19)
  * 
  * Advanced workflow management system for automated data deletion processes

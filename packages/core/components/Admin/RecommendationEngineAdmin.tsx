@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Recommendation Engine Admin - E17-1753114397324-2FB112
  *
  * Administrative interface for configuring and monitoring the recommendation engine

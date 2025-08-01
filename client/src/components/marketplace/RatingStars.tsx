@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 16.1.6 - Enhanced Rating Stars Component
 import React, { useState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';

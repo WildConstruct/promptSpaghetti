@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * UnauthorizedPage - Page shown when user lacks permissions for a resource
  * 
  * Handles role-based access denials with appropriate messaging

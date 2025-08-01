@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * RegistrationPage - Registration page wrapper for existing RegistrationForm component
  * 
  * Integrates with React Router and authentication store

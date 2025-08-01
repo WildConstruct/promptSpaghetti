@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // useDataAccess Hook - Epic 19.4
 // Custom React hook for managing data access operations
 import { useState, useCallback } from 'react';

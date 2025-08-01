@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * User Preference Learning and Modeling Systems - Story 30.2 Task 11
  *
  * Advanced ML-based system for learning user preferences, building predictive models,

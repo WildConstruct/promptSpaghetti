@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Revenue Analytics Dashboard
  * Story 30.1.2 - Revenue Dashboard Implementation
  * 

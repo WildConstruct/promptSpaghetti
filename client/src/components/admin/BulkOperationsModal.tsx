@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 17.1.3 - Bulk Operations Modal Component
 import React, { useState } from 'react';
 import { X, Play, Pause, Archive, AlertTriangle, CheckCircle } from 'lucide-react';

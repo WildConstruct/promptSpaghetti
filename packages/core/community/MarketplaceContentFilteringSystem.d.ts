@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Epic 16 - Marketplace Content Filtering System
  * Task: E16-1753114247062-9DDA29 - Build content filtering system
  *

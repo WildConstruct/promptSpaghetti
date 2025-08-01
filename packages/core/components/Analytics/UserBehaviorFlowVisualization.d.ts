@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * User Behavior Flow Visualization and Analysis Tools - Story 30.2 Task 10
  *
  * Interactive visualization system for analyzing user behavior flows, navigation patterns,

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Basic Test Suite for Password Reset Flow Component
  *
  * Simplified tests focusing on core functionality and rendering.

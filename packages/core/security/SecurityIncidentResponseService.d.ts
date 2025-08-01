@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Security Incident Response and Troubleshooting Service
  * Epic 31 - Security Integration Framework
  * Task: E31-1753313263643-4A6D6C

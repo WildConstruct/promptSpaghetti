@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Policy Enforcement Workflow - E17-1753114397363-F12F4D
  *
  * Integration system for policy enforcement workflows

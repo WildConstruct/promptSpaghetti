@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Unified Event Bus Architecture - Story 1.5 Task 2
  *
  * Consolidates 12+ analytics systems into a unified pub/sub event bus

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
 * Restore Interface - E17-1753114397268-242256
 *
 * Administrative interface for data restoration from backup recovery points

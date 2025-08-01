@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 11 Password Reset Form
 // React component for password reset request functionality
 import React, { useState, useCallback } from 'react';

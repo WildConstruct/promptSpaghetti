@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Flexible Event Schema System - Story 30.2 Task 3
  * 
  * Dynamic schema system for conversion events with runtime validation,

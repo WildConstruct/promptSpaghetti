@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
 * Epic 16 Unified Moderation Dashboard Component
 * Task: E16-1753114247011-98783E - Implement moderation tools
 *

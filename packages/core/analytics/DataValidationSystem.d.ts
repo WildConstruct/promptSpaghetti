@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Data Validation and Consistency System - Story 1.5 Task 3
  *
  * Implements comprehensive data validation and consistency checking

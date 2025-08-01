@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Challenge Component for CAPTCHA Integration
  * Task: T-1752989143997-935 - Integrate CAPTCHA service (reCAPTCHA, hCaptcha)
  * Epic 19: Authentication Enhancement & Security Hardening

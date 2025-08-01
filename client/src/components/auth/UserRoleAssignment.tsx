@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 // Epic 11.3 User Role Assignment Component
 // Interface for assigning and managing user roles with organization and team context
 import React, { useState, useEffect, useCallback } from 'react';

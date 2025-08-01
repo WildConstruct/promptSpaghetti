@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * OAuth Configuration Interface - Epic 19.5
  * 
  * Comprehensive OAuth provider configuration and management interface.

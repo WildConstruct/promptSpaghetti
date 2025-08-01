@@ -1,3 +1,9 @@
+/**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
 import React, { useState, useCallback } from 'react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';

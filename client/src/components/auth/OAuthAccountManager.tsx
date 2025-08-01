@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * OAuth Account Manager Component
  * 
  * Allows users to link/unlink OAuth accounts in their profile settings

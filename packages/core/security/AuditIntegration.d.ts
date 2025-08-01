@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * AuditIntegration - Integrates audit logging with classification enforcement
  *
  * Automatically logs all classification enforcement decisions and data access

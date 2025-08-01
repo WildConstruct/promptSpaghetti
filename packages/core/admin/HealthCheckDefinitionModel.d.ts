@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Health Check Definition Model - Epic 17.4.5
  *
  * Comprehensive framework for defining, validating, and managing health check

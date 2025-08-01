@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * AuditLogger - Comprehensive audit logging for data access
  *
  * Provides detailed logging of all data access operations including:

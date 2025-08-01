@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Conversion Drop-off Analysis and Heatmaps - Story 30.2 Task 6
  * 
  * Advanced drop-off analysis with visual heatmaps, root cause analysis,

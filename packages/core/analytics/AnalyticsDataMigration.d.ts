@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Analytics Data Migration System - Story 1.5 Task 3
  *
  * Implements comprehensive data migration from existing 12+ analytics systems

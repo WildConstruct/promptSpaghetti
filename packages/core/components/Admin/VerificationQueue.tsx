@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Verification Queue Interface - E17-1753114397393-BA8A32
  * 
  * Detailed admin review workflow for verification requests

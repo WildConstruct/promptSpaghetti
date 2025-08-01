@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * User Engagement Scoring and Segmentation - Story 30.2 Task 9
  *
  * Advanced system for scoring user engagement levels and segmenting users based on

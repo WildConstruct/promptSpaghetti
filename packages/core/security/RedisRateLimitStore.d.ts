@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Redis Rate Limit Store Implementation
  * Task: T-1752989143997-617 - Add Redis or similar backend for limit tracking
  * Epic 19: Authentication Enhancement & Security Hardening

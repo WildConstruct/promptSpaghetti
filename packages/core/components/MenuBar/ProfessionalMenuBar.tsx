@@ -101,10 +101,10 @@ const MenuItem: React.FC<MenuItemProps> = ({ label,
   return (
   <div
   style={{
-  height: '1px'
-  backgroundColor: professionalColors.ui.border
-  margin: '4px 0' }
-}
+    height: '1px',
+    backgroundColor: professionalColors.ui.border,
+    margin: '4px 0'
+  }}
       />
     );
 

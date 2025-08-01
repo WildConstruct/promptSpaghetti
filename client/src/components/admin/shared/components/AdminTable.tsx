@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * AdminTable - Reusable table component with sorting, filtering, and pagination
  * REFACTOR-002: Admin Dashboard Architecture Consolidation
  * 

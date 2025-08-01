@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * User Session Recording and Analysis - Story 30.2 Task 9
  *
  * Comprehensive system for recording and analyzing user sessions to understand

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Event Persistence Layer - Story 1.5 Task 2
  *
  * Implements event persistence using repository pattern from Story 1.4

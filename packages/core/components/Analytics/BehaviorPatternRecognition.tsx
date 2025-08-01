@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * User Behavior Pattern Recognition Algorithms - Story 30.2 Task 9
  * 
  * Advanced machine learning-based system for identifying and analyzing user behavior

@@ -1,4 +1,10 @@
 /**
+ * @deprecated Epic 1 - Out of scope for MVP
+ * This file is not part of the core prompt manipulation tool.
+ * It will be removed before deployment.
+ */
+
+/**
  * Conversion Tracking SDK - Story 30.2 Task 2
  *
  * Client-side tracking SDK that extends Epic 1's AnalyticsClient
