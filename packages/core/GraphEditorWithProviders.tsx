@@ -17,9 +17,9 @@ import { Edge,
   OnNodesChange,
   EdgeChange,
   NodeChange,
-  ConnectionLineType }
+  ConnectionLineType,
   useReactFlow
- from 'reactflow';
+} from 'reactflow';
 
 // Import existing GraphEditor components
 import { InspectorPanel } from './components/Inspector';
