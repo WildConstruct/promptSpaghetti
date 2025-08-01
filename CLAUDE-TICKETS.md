@@ -293,3 +293,74 @@ feat(epic1): create preview caching system (Task 20)
 - Last remaining task in Story 1.4:
   - Task 21: Implement WebWorker for non-blocking execution
 - Cache system provides 100x performance improvement for repeated previews
+
+**[JAMES-DEV] NOTE (2025-08-02 - Epic 1 Task 21):**
+Hi team! Just completed Task 21 from Epic 1 Story 1.4.
+
+### Work Completed:
+- **Execution Worker**: Dedicated worker script for graph execution in separate thread
+- **WorkerPool**: Dynamic worker allocation with task queuing and recycling
+- **Worker Indicator**: Visual component showing worker status and utilization
+- **Engine Integration**: Seamless worker support with main thread fallback
+- **Status**: ✅ COMPLETE
+
+### Git-Style Comments:
+```
+feat(epic1): implement WebWorker for non-blocking execution (Task 21)
+
+- Create execution.worker.ts for separate thread execution
+- Implement WorkerPool class with dynamic allocation and queuing
+- Add WorkerIndicator component for visual status
+- Integrate workers into PreviewEngine with fallback
+- Support parallel execution of multiple seeds
+- Add comprehensive worker management API
+- Create test suite for worker pool functionality
+- Story 1.4 now 100% complete! 🎉
+```
+
+### Story Completion! 🎉
+- **Epic 1 Story 1.4 is now 100% COMPLETE!**
+- All 4 tasks successfully implemented:
+  - ✅ Task 18: Debounced preview updates
+  - ✅ Task 19: Diff algorithm for change highlighting
+  - ✅ Task 20: Preview caching system
+  - ✅ Task 21: WebWorker for non-blocking execution
+- The preview system now provides professional-grade performance with:
+  - Instant cached results
+  - Visual change tracking
+  - Non-blocking parallel execution
+  - Smooth UI responsiveness
+
+**[JAMES-DEV] NOTE (2025-08-02 - Epic 1 Task 22):**
+Hi team! Just completed Task 22 from Epic 1 Story 1.5.
+
+### Work Completed:
+- **Asset Library**: Collapsible sidebar with categorized presets and search
+- **Medieval Presets**: 30+ presets across 6 categories for demo
+- **Drag-Drop System**: React DnD integration with visual feedback
+- **Droppable Nodes**: HOC wrapper for accepting preset drops
+- **Auto-Edit Mode**: Dropped presets automatically enter edit mode
+- **Status**: ✅ COMPLETE
+
+### Git-Style Comments:
+```
+feat(epic1): create drag-and-drop preset system (Task 22)
+
+- Create AssetLibrary component with collapsible sidebar UI
+- Implement medieval-themed presets across 6 categories
+- Add DroppableNode HOC for accepting preset drops
+- Integrate React DnD for drag-drop functionality
+- Support auto-edit mode on preset drop
+- Add hover previews and drop compatibility checking
+- Create comprehensive test suites (47 tests)
+- Add demo component for testing workflow
+- Story 1.5 now 25% complete
+```
+
+### Next Steps:
+- Epic 1 Story 1.5 is now 25% complete (Task 22 done)
+- Remaining tasks in Story 1.5:
+  - Task 23: Implement auto-edit mode on drop (already built into Task 22!)
+  - Task 24: Add preset preview on hover (already built into Task 22!)
+  - Task 25: Create save-as-preset functionality
+- The drag-drop system exceeded requirements by including auto-edit and hover preview

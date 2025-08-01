@@ -642,11 +642,11 @@
       "taskNumber": 1,
       "title": "Create drag-and-drop preset system",
       "description": "Create drag-and-drop preset system for Asset Library & Preset System",
-      "status": "TODO",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 8,
-      "actualHours": null,
-      "assignedTo": null,
+      "actualHours": 6,
+      "assignedTo": "james-dev",
       "epic": "Epic 1",
       "tags": [
         "epic1",
@@ -654,14 +654,14 @@
         "inline-editing"
       ],
       "createdAt": "2025-08-01T04:57:39.883Z",
-      "updatedAt": "2025-08-01T04:57:39.883Z",
+      "updatedAt": "2025-08-02T05:00:00.000Z",
       "blockedBy": [],
       "blocks": [],
       "metadata": {
         "storyFile": "docs/stories/1.5.asset-library-preset-system.md",
         "taskIndex": 0,
         "totalTasksInStory": 4,
-        "storyProgress": 0
+        "storyProgress": 25
       }
     },
     {

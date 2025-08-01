@@ -13,9 +13,12 @@ import ReactFlow, {
   ConnectionMode,
   Panel,
 } from 'reactflow';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import 'reactflow/dist/style.css';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
+import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
@@ -24,6 +27,7 @@ import { PreviewEngine } from './preview/PreviewEngine';
 import { PreviewPanel } from './preview/PreviewPanel';
 import { Epic1Graph } from '../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
+import { AssetLibrary, Preset } from './asset-library';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -39,6 +43,8 @@ export interface Epic1GraphEditorProps {
   previewWidth?: number | string;
   previewDebounceDelay?: number;
   previewSeeds?: (string | number)[];
+  showAssetLibrary?: boolean;
+  assetLibraryPosition?: 'left' | 'right';
 }
 
 /**
@@ -55,7 +61,11 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   previewWidth = '400px',
   previewDebounceDelay = 300,
   previewSeeds,
+  showAssetLibrary = true,
+  assetLibraryPosition = 'left',
 }) => {
+  // Use droppable node types if asset library is shown
+  const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
   const [nodes, setNodes, onNodesChange] = useNodesState<EditableNodeData>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -289,15 +299,26 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   }, [isPreviewVisible, previewPosition, previewWidth]);
 
   return (
-    <div className="epic1-graph-editor" style={editorStyle}>
-      <div style={{ position: 'relative', height: '100%' }}>
-        <ReactFlow
+    <DndProvider backend={HTML5Backend}>
+      <div className="epic1-graph-editor" style={editorStyle}>
+        <div style={{ position: 'relative', height: '100%' }}>
+          {/* Asset Library */}
+          {showAssetLibrary && (
+            <AssetLibrary
+              position={assetLibraryPosition}
+              onPresetDrag={(preset) => {
+                console.log('Preset dragged:', preset);
+              }}
+            />
+          )}
+          
+          <ReactFlow
           nodes={enhancedNodes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          nodeTypes={epic1NodeTypes}
+          nodeTypes={nodeTypes}
           isValidConnection={isValidConnection}
           connectionMode={ConnectionMode.Loose}
           fitView
@@ -385,7 +406,8 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           onClose={handleTogglePreview}
         />
       )}
-    </div>
+      </div>
+    </DndProvider>
   );
 };
 
