@@ -31,8 +31,73 @@ if (!validStates.includes(newState)) {
   process.exit(1);
 }
 
+// Check if this is an Epic 1 task
+function isEpic1Task(taskId) {
+  return taskId.startsWith('EPIC1-');
+}
+
+// Handle Epic 1 tasks separately
+async function finishEpic1Task() {
+  const epic1StatePath = path.join(__dirname, 'data', 'epic1-state.json');
+  
+  try {
+    const epic1Data = JSON.parse(fs.readFileSync(epic1StatePath, 'utf8'));
+    const taskIndex = epic1Data.tasks.findIndex(t => t.id === taskId);
+    
+    if (taskIndex === -1) {
+      throw new Error(`Epic 1 task ${taskId} not found`);
+    }
+    
+    const task = epic1Data.tasks[taskIndex];
+    const oldStatus = task.status;
+    
+    // Map generic states to Epic 1 status values
+    const statusMap = {
+      'REVIEW': 'IN_REVIEW',
+      'COMPLETED': 'COMPLETED',
+      'APPROVED': 'COMPLETED',
+      'DONE': 'COMPLETED',
+      'BLOCKED': 'BLOCKED'
+    };
+    
+    task.status = statusMap[newState] || newState;
+    task.updatedAt = new Date().toISOString();
+    
+    // Update story progress if task is completed
+    if (task.status === 'COMPLETED' && oldStatus !== 'COMPLETED') {
+      const storyTasks = epic1Data.tasks.filter(t => t.storyId === task.storyId);
+      const completedTasks = storyTasks.filter(t => t.status === 'COMPLETED').length;
+      const storyProgress = Math.round((completedTasks / storyTasks.length) * 100);
+      
+      // Update all tasks in the story with new progress
+      storyTasks.forEach(t => {
+        t.metadata.storyProgress = storyProgress;
+      });
+    }
+    
+    // Write back to file
+    fs.writeFileSync(epic1StatePath, JSON.stringify(epic1Data, null, 2));
+    
+    console.log(`\n✓ Epic 1 Task ${taskId} updated successfully`);
+    console.log(`  Title: ${task.title}`);
+    console.log(`  Status: ${oldStatus} → ${task.status}`);
+    console.log(`  Story: ${task.storyTitle} (${task.metadata.storyProgress}% complete)`);
+    
+    return;
+  } catch (error) {
+    logger.handleError(error, { taskId, newState });
+    console.error('Error:', error.message);
+    process.exit(1);
+  }
+}
+
 // Use atomic transaction for thread-safe state updates
 async function finishTask() {
+  // Check if this is an Epic 1 task
+  if (isEpic1Task(taskId)) {
+    return finishEpic1Task();
+  }
+
   logger.start(`Updating task ${taskId} to ${newState}`, { taskId, newState });
 
   try {
