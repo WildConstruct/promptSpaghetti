@@ -1,5 +1,5 @@
 import React from 'react';
-import './professional-theme.css';
+import '../professional-theme.css';
 
 export const SimpleGraphEditor: React.FC = () => {
   return (
