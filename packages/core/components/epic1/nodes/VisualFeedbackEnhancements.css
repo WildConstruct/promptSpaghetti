@@ -1,0 +1,229 @@
+/* Enhanced Visual Feedback for Epic 1 Nodes */
+
+/* Smooth focus transitions */
+.epic1-editable-node {
+  position: relative;
+  overflow: visible;
+}
+
+/* Enhanced edit mode feedback */
+.epic1-editable-node.editing::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(circle at center, transparent 30%, rgba(74, 158, 255, 0.1) 100%);
+  border-radius: 12px;
+  animation: editPulse 2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Edit pulse animation */
+@keyframes editPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* Connection point feedback */
+.epic1-handle {
+  position: relative;
+  overflow: visible;
+}
+
+.epic1-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.epic1-handle:hover::after {
+  background: radial-gradient(circle at center, rgba(74, 158, 255, 0.3) 0%, transparent 70%);
+  animation: handlePulse 1s ease-in-out infinite;
+}
+
+@keyframes handlePulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* Save indicator animation */
+.epic1-save-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  animation: saveSuccess 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes saveSuccess {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* Validation error shake */
+.epic1-editable-node.validation-error {
+  animation: errorShake 0.5s ease-out;
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* Focus ring for accessibility */
+.epic1-editable-node:focus-within {
+  outline: 2px solid #4a9eff;
+  outline-offset: 2px;
+}
+
+/* Smooth hover states */
+.epic1-editable-node:hover:not(.editing) {
+  border-color: #4a9eff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Enhanced input focus states */
+.epic1-inline-input:focus,
+.epic1-inline-textarea:focus {
+  background: #ffffff;
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+}
+
+/* Slider enhancements */
+.epic1-weight-slider {
+  background: linear-gradient(to right, #f59e0b 0%, #f59e0b var(--value), #e0e0e0 var(--value), #e0e0e0 100%);
+}
+
+/* Slider track glow on hover */
+.epic1-weight-slider:hover {
+  background: linear-gradient(to right, #f97316 0%, #f97316 var(--value), #d0d0d0 var(--value), #d0d0d0 100%);
+}
+
+/* Option row hover state */
+.epic1-option-row {
+  transition: all 0.2s ease;
+}
+
+.epic1-option-row:hover {
+  background: #f0f1f2;
+  transform: translateX(2px);
+}
+
+/* Smooth weight bar transitions */
+.epic1-weight-bar {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add option button enhanced hover */
+.epic1-add-option {
+  position: relative;
+  overflow: hidden;
+}
+
+.epic1-add-option::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.epic1-add-option:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+/* Node type badges with subtle animation */
+.epic1-node-type-label {
+  position: relative;
+  display: inline-block;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.epic1-editable-node.editing .epic1-node-type-label {
+  background: rgba(74, 158, 255, 0.1);
+  color: #357abd;
+}
+
+/* Completion checkmark animation */
+.epic1-complete-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: #10b981;
+  opacity: 0;
+  animation: completeCheck 0.8s ease-out;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes completeCheck {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}

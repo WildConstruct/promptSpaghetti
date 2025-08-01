@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
+import { SaveIndicator } from './SaveIndicator';
 import './BaseEditableNode.css';
+import './VisualFeedbackEnhancements.css';
 
 export interface EditableNodeData {
   isEditing?: boolean;
@@ -42,6 +44,7 @@ export const BaseEditableNode = memo(({
 }: BaseEditableNodeProps) => {
   const [isEditing, setIsEditing] = useState(data.isEditing || false);
   const [editBuffer, setEditBuffer] = useState(data.editBuffer || data.value || '');
+  const [saveTrigger, setSaveTrigger] = useState(0);
   const nodeRef = useRef<HTMLDivElement>(null);
 
   // Update edit buffer when value changes externally
@@ -71,6 +74,8 @@ export const BaseEditableNode = memo(({
       data.onEdit?.(editBuffer);
       setIsEditing(false);
       data.onEditEnd?.();
+      // Trigger save animation
+      setSaveTrigger(prev => prev + 1);
     }
   };
 
@@ -159,6 +164,7 @@ export const BaseEditableNode = memo(({
       {/* Visual feedback indicators */}
       {isEditing && <div className="epic1-edit-indicator" />}
       {selected && !isEditing && <div className="epic1-selected-indicator" />}
+      <SaveIndicator trigger={saveTrigger} />
     </div>
   );
 });

@@ -259,3 +259,75 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* Enhanced weighted choice features */
+.epic1-weight-presets {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.epic1-preset-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.epic1-preset-btn:hover {
+  background: #f59e0b;
+  color: white;
+  border-color: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.epic1-total-weight {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  padding: 4px 8px;
+  background: #f0f0f0;
+  border-radius: 12px;
+}
+
+.epic1-total-weight.invalid {
+  background: #fee;
+  color: #ef4444;
+}
+
+.epic1-weight-hints {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Keyboard focus styles */
+.epic1-weight-slider:focus {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+/* Animation for weight changes */
+.epic1-weight-value {
+  transition: all 0.2s ease;
+}
+
+.epic1-weight-value.changing {
+  transform: scale(1.2);
+  color: #f59e0b;
+  font-weight: 700;
+}
