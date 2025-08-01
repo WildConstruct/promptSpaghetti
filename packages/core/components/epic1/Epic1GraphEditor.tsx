@@ -72,7 +72,9 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
       seeds: previewSeeds,
       enableCache: true,
       cacheMaxSize: 100,
-      cacheMaxAgeMinutes: 30
+      cacheMaxAgeMinutes: 30,
+      enableWebWorker: true,
+      workerPoolSize: 4
     });
   }
 

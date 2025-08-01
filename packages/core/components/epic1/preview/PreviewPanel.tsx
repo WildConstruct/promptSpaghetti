@@ -11,6 +11,7 @@ import { ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngi
 import { DiffEngine, ChangeSet } from './DiffEngine';
 import { DiffViewer, DiffIndicator, ChangeHighlight } from './DiffViewer';
 import { CacheIndicator } from './CacheIndicator';
+import { WorkerIndicator } from './WorkerIndicator';
 import './PreviewPanel.css';
 
 export interface PreviewPanelProps {
@@ -297,6 +298,15 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           className="preview-cache-indicator"
         />
       )}
+
+      {/* Worker indicator */}
+      <WorkerIndicator
+        enabled={previewEngine.isWebWorkerEnabled()}
+        totalWorkers={previewUpdate?.workerStats?.totalWorkers}
+        busyWorkers={previewUpdate?.workerStats?.busyWorkers}
+        queuedTasks={previewUpdate?.workerStats?.queuedTasks}
+        className="preview-worker-indicator"
+      />
 
       {showSeedControls && renderSeedControls()}
 

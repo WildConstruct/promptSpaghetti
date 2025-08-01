@@ -39,6 +39,11 @@
   margin: 0 16px 12px;
 }
 
+/* Worker Indicator */
+.preview-worker-indicator {
+  margin: 0 16px 12px;
+}
+
 .preview-seed-toggle,
 .preview-close {
   width: 32px;

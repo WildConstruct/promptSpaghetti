@@ -8,7 +8,8 @@
 import { Epic1ExecutionEngine, Epic1Graph, ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
 import { PreviewCache } from './PreviewCache';
-import { ReactFlowNode, ReactFlowEdge } from '../types';
+import { WorkerPool } from './WorkerPool';
+import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';
 
 export enum PreviewState {
   IDLE = 'idle',
@@ -25,6 +26,8 @@ export interface PreviewOptions {
   enableCache?: boolean;
   cacheMaxSize?: number;
   cacheMaxAgeMinutes?: number;
+  enableWebWorker?: boolean;
+  workerPoolSize?: number;
 }
 
 export interface PreviewUpdate {
@@ -37,18 +40,24 @@ export interface PreviewUpdate {
     hitRate: number;
     size: number;
   };
+  workerStats?: {
+    totalWorkers: number;
+    busyWorkers: number;
+    queuedTasks: number;
+  };
 }
 
 export type PreviewUpdateCallback = (update: PreviewUpdate) => void;
 
 /**
- * PreviewEngine - Intelligent debounced graph execution with caching
+ * PreviewEngine - Intelligent debounced graph execution with caching and WebWorker support
  */
 export class PreviewEngine {
   private debounceDelay: number;
   private maxExecutionTime: number;
   private seeds: (string | number)[];
   private cache: PreviewCache | null = null;
+  private workerPool: WorkerPool | null = null;
   
   private debounceTimer: NodeJS.Timeout | null = null;
   private currentExecution: Promise<ExecutionResult[]> | null = null;
@@ -73,6 +82,22 @@ export class PreviewEngine {
         options.cacheMaxSize ?? 100,
         options.cacheMaxAgeMinutes ?? 30
       );
+    }
+
+    // Initialize worker pool if enabled
+    if (options.enableWebWorker !== false && typeof Worker !== 'undefined') {
+      try {
+        // Worker script URL will be set by the build system
+        const workerUrl = new URL('./execution.worker.ts', import.meta.url).href;
+        this.workerPool = new WorkerPool(
+          workerUrl,
+          2, // min workers
+          options.workerPoolSize ?? 4 // max workers
+        );
+      } catch (error) {
+        console.warn('Failed to initialize WebWorker pool:', error);
+        // Fall back to main thread execution
+      }
     }
   }
 
@@ -180,36 +205,42 @@ export class PreviewEngine {
     const signal = this.executionAbortController.signal;
 
     try {
-      // Execute with multiple seeds in parallel
-      const executionPromises = this.seeds.map(async (seed) => {
-        // Check if aborted before starting
-        if (signal.aborted) {
-          throw new Error('Execution cancelled');
+      let results: ExecutionResult[];
+
+      // Use worker pool if available
+      if (this.workerPool && !this.workerPool.isTerminated()) {
+        try {
+          // Track progress for each seed
+          const progressMap = new Map<number, number>();
+          
+          results = await this.workerPool.executeMultiple(
+            graph,
+            this.seeds,
+            (index, progress) => {
+              progressMap.set(index, progress);
+              // You could emit progress updates here if needed
+            }
+          );
+
+          // Add worker stats to state update
+          const workerStats = this.workerPool.getStats();
+          this.setState(PreviewState.IDLE, results, undefined, false, 
+            this.cache ? {
+              hitRate: this.cache.getStats().hitRate,
+              size: this.cache.getStats().size
+            } : undefined,
+            workerStats
+          );
+
+        } catch (workerError) {
+          console.warn('Worker execution failed, falling back to main thread:', workerError);
+          // Fall back to main thread execution
+          results = await this.executeOnMainThread(graph, signal);
         }
-
-        const engine = new Epic1ExecutionEngine(graph, seed);
-        
-        // Execute with timeout
-        const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error('Execution timeout')), this.maxExecutionTime);
-        });
-
-        const abortPromise = new Promise<never>((_, reject) => {
-          signal.addEventListener('abort', () => reject(new Error('Execution cancelled')));
-        });
-
-        return Promise.race([
-          engine.execute(),
-          timeoutPromise,
-          abortPromise
-        ]);
-      });
-
-      // Store current execution promise
-      this.currentExecution = Promise.all(executionPromises);
-
-      // Wait for all executions to complete
-      const results = await this.currentExecution;
+      } else {
+        // Execute on main thread
+        results = await this.executeOnMainThread(graph, signal);
+      }
 
       // Check if still not aborted
       if (!signal.aborted) {
@@ -218,13 +249,15 @@ export class PreviewEngine {
           this.cache.set(this.currentNodes, this.currentEdges, this.seeds as number[], results);
         }
 
-        // Update state with cache stats
-        const cacheStats = this.cache ? {
-          hitRate: this.cache.getStats().hitRate,
-          size: this.cache.getStats().size
-        } : undefined;
+        // Update state with stats if not already done by worker path
+        if (!this.workerPool || this.workerPool.isTerminated()) {
+          const cacheStats = this.cache ? {
+            hitRate: this.cache.getStats().hitRate,
+            size: this.cache.getStats().size
+          } : undefined;
 
-        this.setState(PreviewState.IDLE, results, undefined, false, cacheStats);
+          this.setState(PreviewState.IDLE, results, undefined, false, cacheStats);
+        }
       }
 
     } catch (error) {
@@ -237,6 +270,39 @@ export class PreviewEngine {
       this.currentExecution = null;
       this.executionAbortController = null;
     }
+  }
+
+  /**
+   * Execute graph on main thread (fallback)
+   */
+  private async executeOnMainThread(graph: Epic1Graph, signal: AbortSignal): Promise<ExecutionResult[]> {
+    const executionPromises = this.seeds.map(async (seed) => {
+      // Check if aborted before starting
+      if (signal.aborted) {
+        throw new Error('Execution cancelled');
+      }
+
+      const engine = new Epic1ExecutionEngine(graph, seed);
+      
+      // Execute with timeout
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Execution timeout')), this.maxExecutionTime);
+      });
+
+      const abortPromise = new Promise<never>((_, reject) => {
+        signal.addEventListener('abort', () => reject(new Error('Execution cancelled')));
+      });
+
+      return Promise.race([
+        engine.execute(),
+        timeoutPromise,
+        abortPromise
+      ]);
+    });
+
+    // Store current execution promise
+    this.currentExecution = Promise.all(executionPromises);
+    return this.currentExecution;
   }
 
   /**
@@ -258,7 +324,8 @@ export class PreviewEngine {
     results?: ExecutionResult[], 
     error?: Error,
     cached?: boolean,
-    cacheStats?: { hitRate: number; size: number }
+    cacheStats?: { hitRate: number; size: number },
+    workerStats?: { totalWorkers: number; busyWorkers: number; queuedTasks: number }
   ): void {
     this.state = state;
     
@@ -268,7 +335,8 @@ export class PreviewEngine {
       error,
       timestamp: Date.now(),
       cached,
-      cacheStats
+      cacheStats,
+      workerStats
     };
 
     this.lastUpdate = update;
@@ -369,6 +437,37 @@ export class PreviewEngine {
   }
 
   /**
+   * Get worker pool statistics
+   */
+  getWorkerStats(): ReturnType<WorkerPool['getStats']> | null {
+    return this.workerPool ? this.workerPool.getStats() : null;
+  }
+
+  /**
+   * Enable or disable web workers
+   */
+  setWebWorkerEnabled(enabled: boolean): void {
+    if (enabled && !this.workerPool && typeof Worker !== 'undefined') {
+      try {
+        const workerUrl = new URL('./execution.worker.ts', import.meta.url).href;
+        this.workerPool = new WorkerPool(workerUrl, 2, 4);
+      } catch (error) {
+        console.warn('Failed to initialize WebWorker pool:', error);
+      }
+    } else if (!enabled && this.workerPool) {
+      this.workerPool.terminate();
+      this.workerPool = null;
+    }
+  }
+
+  /**
+   * Check if web workers are enabled
+   */
+  isWebWorkerEnabled(): boolean {
+    return this.workerPool !== null && !this.workerPool.isTerminated();
+  }
+
+  /**
    * Clean up resources
    */
   dispose(): void {
@@ -386,6 +485,12 @@ export class PreviewEngine {
     // Clear cache
     if (this.cache) {
       this.cache.clear();
+    }
+
+    // Terminate worker pool
+    if (this.workerPool) {
+      this.workerPool.terminate();
+      this.workerPool = null;
     }
   }
 }
