@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2025-08-02T04:00:00.000Z",
+  "lastUpdated": "2025-08-01T12:30:00.000Z",
   "epic": "Epic 1 - Prompt Spaghetti MVP",
   "description": "Demo-Ready Rebuild with Inline Editing",
   "tasks": [
@@ -882,11 +882,11 @@
       "taskNumber": 1,
       "title": "Create interactive tutorial for inline editing",
       "description": "Create interactive tutorial for inline editing for Onboarding & Help System",
-      "status": "TODO",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 6,
-      "actualHours": null,
-      "assignedTo": null,
+      "actualHours": 5,
+      "assignedTo": "james-dev",
       "epic": "Epic 1",
       "tags": [
         "epic1",
@@ -894,14 +894,14 @@
         "inline-editing"
       ],
       "createdAt": "2025-08-01T04:57:39.883Z",
-      "updatedAt": "2025-08-01T04:57:39.883Z",
+      "updatedAt": "2025-08-02T09:30:00.000Z",
       "blockedBy": [],
       "blocks": [],
       "metadata": {
         "storyFile": "docs/stories/1.7.onboarding-help-system.md",
         "taskIndex": 0,
         "totalTasksInStory": 4,
-        "storyProgress": 0
+        "storyProgress": 25
       }
     },
     {
@@ -912,11 +912,11 @@
       "taskNumber": 2,
       "title": "Implement contextual help tooltips",
       "description": "Implement contextual help tooltips for Onboarding & Help System",
-      "status": "TODO",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 4,
-      "actualHours": null,
-      "assignedTo": null,
+      "actualHours": 3.5,
+      "assignedTo": "james-dev",
       "epic": "Epic 1",
       "tags": [
         "epic1",
@@ -924,14 +924,14 @@
         "inline-editing"
       ],
       "createdAt": "2025-08-01T04:57:39.883Z",
-      "updatedAt": "2025-08-01T04:57:39.883Z",
+      "updatedAt": "2025-08-02T10:00:00.000Z",
       "blockedBy": [],
       "blocks": [],
       "metadata": {
         "storyFile": "docs/stories/1.7.onboarding-help-system.md",
         "taskIndex": 1,
         "totalTasksInStory": 4,
-        "storyProgress": 0
+        "storyProgress": 50
       }
     },
     {
@@ -942,11 +942,11 @@
       "taskNumber": 3,
       "title": "Add keyboard shortcut reference",
       "description": "Add keyboard shortcut reference for Onboarding & Help System",
-      "status": "TODO",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 3,
-      "actualHours": null,
-      "assignedTo": null,
+      "actualHours": 3,
+      "assignedTo": "james-dev",
       "epic": "Epic 1",
       "tags": [
         "epic1",
@@ -954,14 +954,14 @@
         "inline-editing"
       ],
       "createdAt": "2025-08-01T04:57:39.883Z",
-      "updatedAt": "2025-08-01T04:57:39.883Z",
+      "updatedAt": "2025-08-02T11:00:00.000Z",
       "blockedBy": [],
       "blocks": [],
       "metadata": {
         "storyFile": "docs/stories/1.7.onboarding-help-system.md",
         "taskIndex": 2,
         "totalTasksInStory": 4,
-        "storyProgress": 0
+        "storyProgress": 75
       }
     },
     {
@@ -972,11 +972,11 @@
       "taskNumber": 4,
       "title": "Create getting-started documentation",
       "description": "Create getting-started documentation for Onboarding & Help System",
-      "status": "TODO",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 3,
-      "actualHours": null,
-      "assignedTo": null,
+      "actualHours": 2,
+      "assignedTo": "james-dev",
       "epic": "Epic 1",
       "tags": [
         "epic1",
@@ -984,22 +984,22 @@
         "inline-editing"
       ],
       "createdAt": "2025-08-01T04:57:39.883Z",
-      "updatedAt": "2025-08-01T04:57:39.883Z",
+      "updatedAt": "2025-08-01T12:30:00.000Z",
       "blockedBy": [],
       "blocks": [],
       "metadata": {
         "storyFile": "docs/stories/1.7.onboarding-help-system.md",
         "taskIndex": 3,
         "totalTasksInStory": 4,
-        "storyProgress": 0
+        "storyProgress": 100
       }
     }
   ],
   "metadata": {
     "totalTasks": 33,
-    "completedTasks": 19,
+    "completedTasks": 20,
     "inProgressTasks": 2,
     "blockedTasks": 0,
-    "todoTasks": 12
+    "todoTasks": 11
   }
 }
